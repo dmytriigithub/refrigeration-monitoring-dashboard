@@ -118,7 +118,15 @@ function EquipmentPage() {
           </Select>
         </FormControl>
 
-        <Button variant="outlined" size="medium" onClick={handleResetFilters}>
+        <Button
+          variant="outlined"
+          size="small"
+          onClick={handleResetFilters}
+          sx={{
+            minHeight: 40,
+            px: 2,
+          }}
+        >
           Reset Filters
         </Button>
       </Box>
