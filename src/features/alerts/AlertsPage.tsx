@@ -1,11 +1,6 @@
-import { Box, Typography } from "@mui/material";
-
 import AlertsList from "./AlertsList";
-import { mockAlerts } from "../../mocks/alerts";
-import { Grid } from "@mui/material";
 import StatCard from "../../components/common/StatCard";
 
-import { useState } from "react";
 import {
   FormControl,
   InputLabel,
@@ -13,10 +8,16 @@ import {
   MenuItem,
   TextField,
   Button,
+  Grid,
+  Box,
+  Typography,
 } from "@mui/material";
-import type { AlertSeverity, AlertStatus } from "./types";
 
-import type { Alert } from "./types";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getAlerts } from "../../services/api/alertsApi";
+
+import type { Alert, AlertSeverity, AlertStatus } from "./types";
 
 function calculateAlertStats(alerts: Alert[]) {
   return {
@@ -32,16 +33,29 @@ function calculateAlertStats(alerts: Alert[]) {
 }
 
 function AlertsPage() {
-  const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
+  const [resolvedAlertIds, setResolvedAlertIds] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const stats = calculateAlertStats(alerts);
-
   const [severityFilter, setSeverityFilter] = useState<AlertSeverity | "all">(
     "all",
   );
-
   const [statusFilter, setStatusFilter] = useState<AlertStatus | "all">("all");
+
+  const {
+    data: initialAlerts = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["alerts"],
+    queryFn: getAlerts,
+  });
+
+  const alerts = initialAlerts.map((alert) =>
+    resolvedAlertIds.includes(alert.id)
+      ? { ...alert, status: "resolved" as const }
+      : alert,
+  );
+
+  const stats = calculateAlertStats(alerts);
 
   const filteredAlerts = alerts.filter((alert) => {
     const query = searchQuery.toLowerCase();
@@ -62,10 +76,8 @@ function AlertsPage() {
   });
 
   const handleResolveAlert = (alertId: string) => {
-    setAlerts((previousAlerts) =>
-      previousAlerts.map((alert) =>
-        alert.id === alertId ? { ...alert, status: "resolved" } : alert,
-      ),
+    setResolvedAlertIds((previousIds) =>
+      previousIds.includes(alertId) ? previousIds : [...previousIds, alertId],
     );
   };
 
@@ -74,6 +86,21 @@ function AlertsPage() {
     setSeverityFilter("all");
     setStatusFilter("all");
   };
+
+  if (isLoading) {
+    return <Box sx={{ p: 3 }}>Loading alerts...</Box>;
+  }
+
+  if (isError) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography color="error">
+          Failed to load alerts. Please try again.
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h5" sx={{ mb: 1, fontWeight: 600 }}>

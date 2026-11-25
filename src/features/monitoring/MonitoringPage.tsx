@@ -10,10 +10,10 @@ import {
   Chip,
 } from "@mui/material";
 
-import { mockEquipment } from "../../mocks/equipment";
-
 import TemperatureChart from "./TemperatureChart";
-import { mockTemperatureReadings } from "../../mocks/temperatureReadings";
+import { useQuery } from "@tanstack/react-query";
+import { getTemperatureReadings } from "../../services/api/temperatureApi";
+import { getEquipment } from "../../services/api/equipmentApi";
 
 type TemperatureStatus = "Normal" | "Warning" | "Critical";
 
@@ -27,15 +27,33 @@ function getTemperatureStatus(temperature: number | null): TemperatureStatus {
 }
 
 function MonitoringPage() {
-  const coldRooms = mockEquipment.filter((item) => item.type === "cold-room");
-
   const [selectedEquipmentId, setSelectedEquipmentId] = useState("ROOM-003");
+
+  const {
+    data: readings = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["temperature-readings"],
+    queryFn: getTemperatureReadings,
+  });
+
+  const {
+    data: equipment = [],
+    isLoading: isEquipmentLoading,
+    isError: isEquipmentError,
+  } = useQuery({
+    queryKey: ["equipment"],
+    queryFn: getEquipment,
+  });
+
+  const coldRooms = equipment.filter((item) => item.type === "cold-room");
 
   const selectedEquipment = coldRooms.find(
     (item) => item.id === selectedEquipmentId,
   );
 
-  const selectedReadings = mockTemperatureReadings.filter(
+  const selectedReadings = readings.filter(
     (reading) => reading.equipmentId === selectedEquipmentId,
   );
 
@@ -50,6 +68,20 @@ function MonitoringPage() {
     Warning: "warning",
     Critical: "error",
   } as const;
+
+  if (isLoading || isEquipmentLoading) {
+    return <Box sx={{ p: 3 }}>Loading monitoring data...</Box>;
+  }
+
+  if (isError || isEquipmentError) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography color="error">
+          Failed to load monitoring data. Please try again.
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ p: 3 }}>

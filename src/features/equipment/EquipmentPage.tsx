@@ -10,18 +10,29 @@ import {
   Button,
 } from "@mui/material";
 
+import { useQuery } from "@tanstack/react-query";
+import { getEquipment } from "../../services/api/equipmentApi";
+
 import EquipmentStatusTable from "../../components/common/EquipmentStatusTable";
-import { mockEquipment } from "../../mocks/equipment";
 import type { EquipmentStatus, EquipmentType } from "./types";
 
 function EquipmentPage() {
+  const {
+    data: equipment = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["equipment"],
+    queryFn: getEquipment,
+  });
+
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<EquipmentStatus | "all">(
     "all",
   );
   const [typeFilter, setTypeFilter] = useState<EquipmentType | "all">("all");
 
-  const filteredEquipment = mockEquipment.filter((item) => {
+  const filteredEquipment = equipment.filter((item) => {
     const query = searchQuery.toLowerCase();
 
     const matchesSearch =
@@ -42,6 +53,20 @@ function EquipmentPage() {
     setStatusFilter("all");
     setTypeFilter("all");
   };
+
+  if (isLoading) {
+    return <Box sx={{ p: 3 }}>Loading equipment...</Box>;
+  }
+
+  if (isError) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography color="error">
+          Failed to load equipment. Please try again.
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -133,7 +158,7 @@ function EquipmentPage() {
 
       {/* Results count */}
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        Showing {filteredEquipment.length} of {mockEquipment.length} equipment
+        Showing {filteredEquipment.length} of {equipment.length} equipment
       </Typography>
 
       {/* Equipment table */}
