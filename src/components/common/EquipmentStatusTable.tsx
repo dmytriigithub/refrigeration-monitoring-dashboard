@@ -8,6 +8,8 @@ import {
   TableRow,
   Chip,
 } from "@mui/material";
+import { useState } from "react";
+import { TableSortLabel } from "@mui/material";
 
 import type { Equipment } from "../../features/equipment/types";
 
@@ -16,12 +18,31 @@ interface EquipmentStatusTableProps {
 }
 
 function EquipmentStatusTable({ equipment }: EquipmentStatusTableProps) {
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
+  const sortedEquipment = [...equipment].sort((a, b) => {
+    const comparison = a.name.localeCompare(b.name);
+
+    return sortOrder === "asc" ? comparison : -comparison;
+  });
   return (
     <TableContainer component={Paper} elevation={0}>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Equipment</TableCell>
+            <TableCell>
+              <TableSortLabel
+                active
+                direction={sortOrder}
+                onClick={() =>
+                  setSortOrder((previous) =>
+                    previous === "asc" ? "desc" : "asc",
+                  )
+                }
+              >
+                Equipment
+              </TableSortLabel>
+            </TableCell>
             <TableCell>Type</TableCell>
             <TableCell>Location</TableCell>
             <TableCell>Status</TableCell>
@@ -30,7 +51,7 @@ function EquipmentStatusTable({ equipment }: EquipmentStatusTableProps) {
         </TableHead>
 
         <TableBody>
-          {equipment.map((item) => (
+          {sortedEquipment.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.name}</TableCell>
               <TableCell>{item.type}</TableCell>
