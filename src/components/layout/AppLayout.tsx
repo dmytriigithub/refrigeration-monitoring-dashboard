@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
 import Sidebar from "./Sidebar";
+import Header from "./Header";
 
 function AppLayout() {
   return (
@@ -18,10 +19,16 @@ function AppLayout() {
         sx={{
           flexGrow: 1,
           minWidth: 0,
+          display: "flex",
+          flexDirection: "column",
           backgroundColor: "background.default",
         }}
       >
-        <Outlet />
+        <Header />
+
+        <Box sx={{ flexGrow: 1 }}>
+          <Outlet />
+        </Box>
       </Box>
     </Box>
   );
