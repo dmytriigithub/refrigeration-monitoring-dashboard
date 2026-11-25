@@ -1,78 +1,170 @@
-# React + TypeScript + Vite
+# Refrigeration Monitoring Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based IoT monitoring application for refrigeration systems, built with React and TypeScript.
 
-Currently, two official plugins are available:
+The project aims to simulate an industrial monitoring platform where users can monitor refrigeration equipment, track temperature measurements, review system alerts, and analyze operational data.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Project status:** 🚧 In Development
 
-## React Compiler
+## Overview
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+Refrigeration Monitoring Dashboard is a portfolio project inspired by industrial refrigeration and monitoring solutions.
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+The application is designed to provide a centralized interface for monitoring refrigeration equipment and visualizing operational data.
 
-## Expanding the ESLint configuration
+The long-term goal is to develop a full-stack application with a React frontend and a Python backend.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Technology Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Frontend
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- React
+- TypeScript
+- Vite
+- Material UI
+- React Router
+- TanStack Query
+- Recharts
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Testing
 
+- Vitest
+- React Testing Library
+- Jest DOM
+
+### Planned Backend
+
+- Python
+- Flask
+- SQLAlchemy
+- SQLite
+
+## Current Features
+
+- React + TypeScript application setup
+- Feature-based project structure
+- Material UI theme configuration
+- Global application providers
+- Sidebar navigation
+- Nested routing with React Router
+- Four application routes:
+  - Dashboard
+  - Equipment
+  - Alerts & Events
+  - Temperature Monitoring
+
+## Planned Features
+
+- Dashboard with operational KPIs
+- Equipment inventory and status monitoring
+- Temperature monitoring and historical charts
+- Alerts and events management
+- Realistic simulated IoT sensor data
+- REST API integration
+- Flask backend
+- SQLite database
+- Automated component and integration tests
+- Responsive user interface
+
+## Project Structure
+
+```text
+src/
+├── app/
+│   ├── providers/
+│   ├── theme/
+│   └── App.tsx
+│
+├── components/
+│   ├── common/
+│   └── layout/
+│       ├── AppLayout.tsx
+│       └── Sidebar.tsx
+│
+├── features/
+│   ├── dashboard/
+│   ├── equipment/
+│   ├── alerts/
+│   └── monitoring/
+│
+├── services/
+│   └── api/
+│
+├── mocks/
+├── types/
+└── main.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Prerequisites
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Node.js
+- npm
+- Git
 
+### Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/dmytriigithub/refrigeration-monitoring-dashboard.git
 ```
+
+Navigate to the project directory:
+
+```bash
+cd refrigeration-monitoring-dashboard
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The application will be available at:
+
+```text
+http://localhost:5173
+```
+
+### Production Build
+
+To create a production build:
+
+```bash
+npm run build
+```
+
+## Development Goals
+
+This project is being developed to strengthen practical skills in:
+
+- React application architecture
+- TypeScript and type-safe development
+- Component-based UI development
+- API integration and server-state management
+- Data visualization
+- Automated testing
+- Full-stack application development
+
+## Motivation
+
+The project is inspired by industrial refrigeration, automation, and IoT monitoring systems.
+
+It combines my hands-on experience working with automated dairy farm equipment and my interest in software engineering.
+
+The goal is to build a practical application that demonstrates how modern web technologies can be used to monitor industrial equipment and visualize operational data.
+
+---
+
+**Author:** Dmytro
+
+**Repository:** [Refrigeration Monitoring Dashboard](https://github.com/dmytriigithub/refrigeration-monitoring-dashboard)
